@@ -1,5 +1,5 @@
-# [https://cryptopals.com](CryptoPals) challenge solutions
+# [CryptoPals](https://cryptopals.com) challenge solutions
 
-## [https://cryptopals.com/sets/1](Crypto Challenge Set 1)
+## [Crypto Challenge Set 1](https://cryptopals.com/sets/1)
 
-[Crypto\ Challenge\ Set\ 1.ipynb](Crypto Challenge Set 1.ipynb)
+[Crypto Challenge Set 1.ipynb](Crypto\ Challenge\ Set\ 1.ipynb)
