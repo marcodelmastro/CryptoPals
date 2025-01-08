@@ -100,6 +100,8 @@ def repeating_key_xor(plaintext: bytes, key: bytes):
 def hamming_distance(s1: bytes, s2: bytes) -> int:
     return sum([bin(b1^b2).count("1") for b1,b2 in zip(s1,s2)])
 
+from itertools import combinations
+
 def guess_rep_key_xor(b: bytes, kmin=2, kmax=40, quiet=True):
     # guess keysize by testing testing several values and choosing that giving the smallest
     # normalised Hamming distance on blocks of that size
@@ -145,13 +147,54 @@ def guess_rep_key_xor(b: bytes, kmin=2, kmax=40, quiet=True):
 
 from Cryptodome.Cipher import AES
 
-def aes_ecb_decode(cipher: bytes, key: bytes) -> bytes:
+def pkcs7_pad(b: bytes, blocksize: int = 16) -> bytes:
+    if blocksize == 16:
+        pad_len = blocksize - (len(b) & 15)
+    else:
+        pad_len = blocksize - (len(b) % blocksize)
+    return b + bytes([pad_len]) * pad_len
+
+class PaddingError(Exception):
+    pass
+    
+def pkcs7_strip(b: bytes) -> bytes:
+    n = b[-1]
+    if n==0 or len(b)<n or not b.endswith(bytes([n])*n): # invalid padding
+        raise PaddingError
+    else:
+        return b[:-n]
+
+def aes_ecb_decrypt(cipher: bytes, key: bytes) -> bytes:
     aes = AES.new(key, AES.MODE_ECB) 
     return aes.decrypt(cipher)
+
+def aes_ecb_encrypt(plaintext: bytes, key: bytes) -> bytes:
+    keysize = len(key)
+    aes_ecb = AES.new(key,AES.MODE_ECB)
+    return aes_ecb.encrypt( pkcs7_pad(plaintext, len(plaintext)+keysize-len(plaintext)%keysize) )
 
 def bytes_to_chuncks(b: bytes, chunksize=16) -> list:
     return [ b[i:i+chunksize] for i in range(0,len(b),chunksize) ]
 
 def detect_aes_ecb_mode(cipher: bytes, blocksize=16):
     blocks = bytes_to_chuncks(cipher,blocksize)
-    return len(blocks) - len(set(blocks))
+    return (len(blocks) - len(set(blocks))) != 0
+
+def aes_cbc_decrypt(cipher: bytes, key: bytes) -> bytes:
+    aes = AES.new(key, AES.MODE_ECB)
+    bsize = len(key)
+    blocks = bytes_to_chuncks(cipher,bsize)
+    IV = bsize*b"\x00"    
+    plaintext = b""
+    for i in range(len(blocks)):
+        # decrypt block with AES ECB mode
+        plainblock = aes.decrypt(blocks[i])
+        # XOR with IV or previous cipher block
+        plainblock = bytes_xor(plainblock,IV) if i==0 else bytes_xor(plainblock,blocks[i-1])
+        plaintext += plainblock
+    return plaintext
+
+import os
+
+def generate_aes_key(keylen=16):
+    return os.urandom(keylen)
