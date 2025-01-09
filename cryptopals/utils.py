@@ -155,7 +155,7 @@ def pkcs7_pad(b: bytes, blocksize: int = 16) -> bytes:
     return b + bytes([pad_len]) * pad_len
 
 class PaddingError(Exception):
-    passRE
+    pass
     
 def pkcs7_strip(b: bytes) -> bytes:
     n = b[-1]
