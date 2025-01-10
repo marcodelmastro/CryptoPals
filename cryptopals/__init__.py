@@ -4,3 +4,5 @@ from .utils import PaddingError, pkcs7_pad, pkcs7_strip, aes_ecb_decrypt, aes_ec
 from .utils import generate_ctr_keystream, aes_ctr_decode_encode
 
 from .cbc_padding_oracle_attack import single_block_attack, full_attack
+
+from .random import MersenneTwisterRNG
