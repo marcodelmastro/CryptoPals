@@ -198,3 +198,14 @@ import os
 
 def generate_aes_key(keylen=16):
     return os.urandom(keylen)
+
+def generate_ctr_keystream(key: bytes, nonce: int, msglen: int) -> bytes:
+    aes = AES.new(key, AES.MODE_ECB)
+    keystream = b""
+    for counter in range(math.ceil(msglen/AES.block_size)): # generate for N blocks covering all message 
+        to_be_encrypted = nonce.to_bytes(length=AES.block_size//2, byteorder='little') + counter.to_bytes(length=AES.block_size//2, byteorder='little')
+        keystream += aes.encrypt(to_be_encrypted)
+    return keystream[:msglen] # trim keystream to message lenght (if shorter than N blocks 
+
+def aes_ctr_decode_encode(b: bytes, key: bytes, nonce: int) -> bytes:
+    return bytes_xor(b,generate_ctr_keystream(key,nonce,len(b)))
