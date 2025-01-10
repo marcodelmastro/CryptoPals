@@ -11,3 +11,4 @@
 ### [Challenge Set 3](https://cryptopals.com/sets/3)
 
 * [Challenge17.ipynb](Challenge17.ipynb): CBC padding oracle
+* [Challenge18-19-20.ipynb](Challenge18-19-20.ipynb): Breaking fixed-nonce CTR
