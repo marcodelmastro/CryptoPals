@@ -1,4 +1,4 @@
-class MersenneTwisterRNG:
+class MT19937:
 
     # Coefficients for MT19937
     (w, n, m, r) = (32, 624, 397, 31)
