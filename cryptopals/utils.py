@@ -199,6 +199,8 @@ import os
 def generate_aes_key(keylen=16):
     return os.urandom(keylen)
 
+import math
+
 def generate_ctr_keystream(key: bytes, nonce: int, msglen: int) -> bytes:
     aes = AES.new(key, AES.MODE_ECB)
     keystream = b""
