@@ -16,6 +16,7 @@ class MT19937:
         self.state_array = [0] * self.n  # Array for the state vector
         self.state_index = 0            # Index into state vector array, 0 <= state_index <= n-1
         self.initialize_state(seed)
+        self.seed = seed
 
     def initialize_state(self, seed: int = 19650218):
         self.state_array[0] = seed & 0xFFFFFFFF  # Limit to 32 bits
