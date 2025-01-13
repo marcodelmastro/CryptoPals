@@ -16,4 +16,4 @@
     * MT19937 Mersenne Twister RNG implementation
     * Time-based seed guessing
     * MT19937 cloning by inverting tempering function
-    * ...
+    * MT19937 stream cipher, brute force and frequency analysis cracking 
