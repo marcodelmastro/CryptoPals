@@ -17,4 +17,12 @@
         * MT19937 Mersenne Twister RNG implementation
         * Time-based seed guessing
         * MT19937 cloning by inverting tempering function
-        * MT19937 stream cipher, brute force and frequency analysis cracking 
+        * MT19937 stream cipher, brute force and frequency analysis cracking
+     
+### [Challenge Set 4](https://cryptopals.com/sets/4)
+
+* [ChallengeSet4.ipynb](ChallengeSet3.ipynb)
+    * 25: Break "random access read/write" AES CTR
+    * 26: CTR bitflipping. Same attack than challenge 16
+    * 27: Recover the key from CBC with IV=Key. Care needed with padding errors from attack ciphertext, solved by concatenating legitmate ciphertect tail from first encryption.
+      
