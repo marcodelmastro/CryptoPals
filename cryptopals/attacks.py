@@ -31,3 +31,15 @@ def full_attack(iv, cipher, oracle, BLOCKSIZE=AES.block_size):
         result += plaintext
         iv = cipher
     return result
+
+def make_bitflipping_attack(profile, inject=b";admin=true;", BLOCKSIZE=AES.block_size) -> bytes:
+    a_block = b"A" * BLOCKSIZE
+    cipher = profile.wrap_userdata(2*a_block)
+    # right justify injection block with padding
+    injection = inject.rjust(BLOCKSIZE, b"A")
+    flipper = bytes_xor(a_block,injection)
+    # flipped block will be 4th block in plain text, it's then left justified to the lenght of the ciphertext
+    padded = flipper.rjust(3*BLOCKSIZE, b"\x00").ljust(len(cipher), b"\x00")
+    # xor with original encrypter wrapped user data
+    cipher_new = bytes_xor(cipher,padded)
+    return cipher_new
