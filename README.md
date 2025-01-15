@@ -26,3 +26,4 @@
     * 26: CTR bitflipping. Same attack than challenge 16
     * 27: Recover the key from CBC with IV=Key. Care needed with padding errors from attack ciphertext, solved by concatenating legitmate ciphertect tail from first encryption.
     * 28, 29: SHA-1 keyed MAC length extension attack
+    * 30: MD4 keyed MAC length extension attack
